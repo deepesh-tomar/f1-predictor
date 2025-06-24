@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold" style="color:#fff;">
+            <i class="fas fa-car f1-logo"></i>
+            Prediction Result
+        </h1>
+        <p class="lead" style="color:#fff;">{{ prediction.driver }} at {{ prediction.team }} - {{ prediction.circuit }}</p>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card prediction-card p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6 text-center">
+                        <h3 style="color:#fff;">Predicted Race Position</h3>
+                        <div class="position-badge" style="font-size:2.5rem;">P{{ prediction.predicted_position }}</div>
+                        <div class="mt-2" style="color:#fff;">Qualifying: <span class="qualifying-badge">P{{ prediction.predicted_qualifying }}</span></div>
+                        <div class="mt-2" style="color:#fff;">Points: <span class="points-badge">{{ prediction.predicted_points }}</span></div>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h3 style="color:#fff;">Category</h3>
+                        <div class="result-emoji" style="font-size:3rem;">{{ prediction.result_emoji }}</div>
+                        <div class="mt-2" style="color:#fff;">{{ prediction.result_category }}</div>
+                        <div class="mt-2" style="color:#fff;">Confidence: <span style="color:#fff;">{{ (prediction.confidence * 100) | round(1) }}%</span></div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h4 class="text-center mb-3" style="color:#fff;">Prediction Details</h4>
+                        <table class="table table-hover" style="color:#fff;">
+                            <tbody>
+                                <tr><th style="color:#fff;">Predicted Position</th><td style="color:#fff;">P{{ prediction.predicted_position }}</td></tr>
+                                <tr><th style="color:#fff;">Predicted Qualifying</th><td style="color:#fff;">P{{ prediction.predicted_qualifying }}</td></tr>
+                                <tr><th style="color:#fff;">Predicted Points</th><td style="color:#fff;">{{ prediction.predicted_points }}</td></tr>
+                                <tr><th style="color:#fff;">Confidence</th><td style="color:#fff;">{{ (prediction.confidence * 100) | round(1) }}%</td></tr>
+                                <tr><th style="color:#fff;">Uncertainty</th><td style="color:#fff;">{{ (prediction.uncertainty * 100) | round(1) }}%</td></tr>
+                                <tr><th style="color:#fff;">Prediction Interval</th><td style="color:#fff;">P{{ prediction.prediction_intervals.position_lower }} - P{{ prediction.prediction_intervals.position_upper }}</td></tr>
+                                <tr><th style="color:#fff;">Points Interval</th><td style="color:#fff;">{{ prediction.prediction_intervals.points_lower }} - {{ prediction.prediction_intervals.points_upper }}</td></tr>
+                                <tr><th style="color:#fff;">Features Used</th><td style="color:#fff;">{{ prediction.features_used }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary btn-lg me-3"><i class="fas fa-home"></i> New Prediction</a>
+                    <a href="/stats" class="btn btn-outline-light btn-lg"><i class="fas fa-chart-bar"></i> View Statistics</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

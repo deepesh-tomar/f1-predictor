@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}F1 Race Predictor - Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" style="color:#fff;">
+                <i class="fas fa-car f1-logo"></i>
+                F1 Driver Team Switch Predictor
+            </h1>
+            <p class="lead" style="color:#fff;">Predict how drivers will perform when switching teams in the 2025 season</p>
+        </div>
+
+        <!-- Prediction Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">
+                    <i class="fas fa-crystal-ball"></i>
+                    2025 Season Race Prediction
+                </h3>
+                
+                <form id="predictionForm" method="POST" action="/predict">
+                    <div class="row">
+                        <!-- Driver Selection -->
+                        <div class="col-md-4 mb-3">
+                            <label for="driver_search" class="form-label">
+                                <i class="fas fa-user"></i> Driver Name
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="driver_search" 
+                                       placeholder="Search for a driver..."
+                                       autocomplete="off">
+                                <input type="hidden" id="driver_id" name="driver_id" required>
+                                <div id="driver_results" class="search-results" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Team Selection -->
+                        <div class="col-md-4 mb-3">
+                            <label for="team_search" class="form-label">
+                                <i class="fas fa-flag"></i> Team (2025)
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="team_search" 
+                                       placeholder="Search for a team..."
+                                       autocomplete="off">
+                                <input type="hidden" id="team_id" name="team_id" required>
+                                <div id="team_results" class="search-results" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Circuit Selection -->
+                        <div class="col-md-4 mb-3">
+                            <label for="circuit_search" class="form-label">
+                                <i class="fas fa-road"></i> Circuit
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="circuit_search" 
+                                       placeholder="Search for a circuit..."
+                                       autocomplete="off">
+                                <input type="hidden" id="circuit_id" name="circuit_id" required>
+                                <div id="circuit_results" class="search-results" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic"></i>
+                            Predict Performance
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Circuit Order Prediction Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">
+                    <i class="fas fa-flag-checkered"></i>
+                    Circuit Start & Finish Order Prediction
+                </h3>
+                
+                <form id="circuitOrderForm" method="POST" action="/predict_circuit_order">
+                    <div class="row justify-content-center">
+                        <!-- Circuit Selection -->
+                        <div class="col-md-6 mb-3">
+                            <label for="circuit_order_search" class="form-label">
+                                <i class="fas fa-road"></i> Circuit
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="circuit_order_search" 
+                                       placeholder="Search for a circuit..."
+                                       autocomplete="off">
+                                <input type="hidden" id="circuit_order_id" name="circuit_id" required>
+                                <div id="circuit_order_results" class="search-results" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-list-ol"></i>
+                            Predict Complete Race Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Qualification & Race Results Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">
+                    <i class="fas fa-table"></i>
+                    Qualification & Race Results
+                </h3>
+                <form id="qualRaceForm" method="POST" action="/qual_race_results">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 mb-3">
+                            <label for="qual_race_circuit_search" class="form-label">
+                                <i class="fas fa-road"></i> Circuit
+                            </label>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="qual_race_circuit_search" 
+                                       placeholder="Search for a circuit..."
+                                       autocomplete="off">
+                                <input type="hidden" id="qual_race_circuit_id" name="circuit_id" required>
+                                <div id="qual_race_circuit_results" class="search-results" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-info btn-lg">
+                            <i class="fas fa-table"></i>
+                            Show Qual & Race Results
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Examples -->
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center mb-3">
+                    <i class="fas fa-lightbulb"></i>
+                    Quick Examples
+                </h4>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <button class="btn btn-outline-light w-100" onclick="fillExample('hamilton', 'ferrari', 'australia')">
+                            <i class="fas fa-play"></i> Hamilton at Ferrari (Australia 2025)
+                        </button>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <button class="btn btn-outline-light w-100" onclick="fillExample('alonso', 'mclaren', 'monaco')">
+                            <i class="fas fa-play"></i> Alonso at McLaren (Monaco 2025)
+                        </button>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <button class="btn btn-outline-light w-100" onclick="fillCircuitExample('monaco')">
+                            <i class="fas fa-play"></i> Complete Monaco GP Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Search functionality for all search fields
+const searchFields = [
+    { input: 'driver_search', results: 'driver_results', hidden: 'driver_id', endpoint: '/search_drivers' },
+    { input: 'team_search', results: 'team_results', hidden: 'team_id', endpoint: '/search_teams' },
+    { input: 'circuit_search', results: 'circuit_results', hidden: 'circuit_id', endpoint: '/search_circuits' },
+    { input: 'circuit_order_search', results: 'circuit_order_results', hidden: 'circuit_order_id', endpoint: '/search_circuits' },
+    { input: 'qual_race_circuit_search', results: 'qual_race_circuit_results', hidden: 'qual_race_circuit_id', endpoint: '/search_circuits' }
+];
+
+searchFields.forEach(field => {
+    const input = document.getElementById(field.input);
+    const results = document.getElementById(field.results);
+    const hidden = document.getElementById(field.hidden);
+    
+    let timeout;
+    
+    input.addEventListener('input', function() {
+        clearTimeout(timeout);
+        const query = this.value.trim();
+        
+        if (query.length < 2) {
+            results.style.display = 'none';
+            return;
+        }
+        
+        timeout = setTimeout(() => {
+            fetch(`${field.endpoint}?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+                    
+                    results.innerHTML = '';
+                    
+                    if (data.length === 0) {
+                        results.innerHTML = '<div class="search-result-item">No results found</div>';
+                    } else {
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'search-result-item';
+                            div.textContent = field.endpoint.includes('drivers') ? 
+                                `${item.name} (${item.nationality})` : 
+                                field.endpoint.includes('teams') ? 
+                                `${item.name} (${item.nationality})` : 
+                                item.name;
+                            
+                            div.addEventListener('click', () => {
+                                input.value = field.endpoint.includes('drivers') ? 
+                                    item.name : 
+                                    field.endpoint.includes('teams') ? 
+                                    item.name : 
+                                    item.name;
+                                hidden.value = item.id;
+                                results.style.display = 'none';
+                            });
+                            
+                            results.appendChild(div);
+                        });
+                    }
+                    
+                    results.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                });
+        }, 300);
+    });
+    
+    // Hide results when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!input.contains(e.target) && !results.contains(e.target)) {
+            results.style.display = 'none';
+        }
+    });
+});
+
+// Quick example fillers
+function fillExample(driver, team, circuit) {
+    // Fill the main prediction form
+    document.getElementById('driver_search').value = driver.charAt(0).toUpperCase() + driver.slice(1);
+    document.getElementById('team_search').value = team.charAt(0).toUpperCase() + team.slice(1);
+    document.getElementById('circuit_search').value = circuit.charAt(0).toUpperCase() + circuit.slice(1) + ' Grand Prix';
+    
+    // Trigger search to populate hidden fields
+    setTimeout(() => {
+        document.getElementById('driver_search').dispatchEvent(new Event('input'));
+        document.getElementById('team_search').dispatchEvent(new Event('input'));
+        document.getElementById('circuit_search').dispatchEvent(new Event('input'));
+    }, 100);
+}
+
+function fillCircuitExample(circuit) {
+    // Fill the circuit order form
+    document.getElementById('circuit_order_search').value = circuit.charAt(0).toUpperCase() + circuit.slice(1) + ' Grand Prix';
+    
+    // Trigger search to populate hidden field
+    setTimeout(() => {
+        document.getElementById('circuit_order_search').dispatchEvent(new Event('input'));
+    }, 100);
+}
+
+// Form validation
+document.getElementById('predictionForm').addEventListener('submit', function(e) {
+    const driverId = document.getElementById('driver_id').value;
+    const teamId = document.getElementById('team_id').value;
+    const circuitId = document.getElementById('circuit_id').value;
+    
+    if (!driverId || !teamId || !circuitId) {
+        e.preventDefault();
+        alert('Please select a driver, team, and circuit before submitting.');
+    }
+});
+
+document.getElementById('circuitOrderForm').addEventListener('submit', function(e) {
+    const circuitId = document.getElementById('circuit_order_id').value;
+    
+    if (!circuitId) {
+        e.preventDefault();
+        alert('Please select a circuit before submitting.');
+    }
+});
+
+document.getElementById('qualRaceForm').addEventListener('submit', function(e) {
+    const circuitId = document.getElementById('qual_race_circuit_id').value;
+    if (!circuitId) {
+        e.preventDefault();
+        alert('Please select a circuit before submitting.');
+    }
+});
+</script>
+{% endblock %} 

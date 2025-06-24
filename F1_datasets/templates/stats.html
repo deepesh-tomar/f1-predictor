@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Driver Team Switch Predictor - Statistics</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --f1-dark: #1e1e1e;
+            --f1-light: #f8f9fa;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(90deg, var(--f1-red) 0%, #ff4444 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 86, 179, 0.1) 100%);
+            border: 2px solid #007bff;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--f1-red);
+            text-shadow: 0 0 10px rgba(225, 6, 0, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #cccccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .f1-logo {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--f1-red), #ff4444);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #ff4444, var(--f1-red));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(225, 6, 0, 0.4);
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-car f1-logo"></i>
+                F1 Team Switch Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/stats"><i class="fas fa-chart-bar"></i> Statistics</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-chart-bar text-danger"></i>
+                Dataset Statistics
+            </h1>
+            <p class="lead text-muted">Comprehensive F1 data analysis and insights</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row">
+                    <!-- Drivers -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card stats-card text-center h-100">
+                            <div class="card-body">
+                                <div class="stat-number">{{ stats.drivers }}</div>
+                                <div class="stat-label">Drivers</div>
+                                <i class="fas fa-user mt-3" style="font-size: 2rem; color: #007bff;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teams -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card stats-card text-center h-100">
+                            <div class="card-body">
+                                <div class="stat-number">{{ stats.teams }}</div>
+                                <div class="stat-label">Teams</div>
+                                <i class="fas fa-flag mt-3" style="font-size: 2rem; color: #007bff;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Circuits -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card stats-card text-center h-100">
+                            <div class="card-body">
+                                <div class="stat-number">{{ stats.circuits }}</div>
+                                <div class="stat-label">Circuits</div>
+                                <i class="fas fa-road mt-3" style="font-size: 2rem; color: #007bff;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Years -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card stats-card text-center h-100">
+                            <div class="card-body">
+                                <div class="stat-number">{{ stats.years }}</div>
+                                <div class="stat-label">Years</div>
+                                <i class="fas fa-calendar mt-3" style="font-size: 2rem; color: #007bff;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Statistics -->
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-trophy"></i>
+                                    Total Races
+                                </h5>
+                                <div class="stat-number">{{ stats.total_races }}</div>
+                                <p class="text-muted">Grand Prix events in the dataset</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-medal"></i>
+                                    Total Results
+                                </h5>
+                                <div class="stat-number">{{ stats.total_results }}</div>
+                                <p class="text-muted">Individual race results recorded</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back to Home -->
+                <div class="text-center mt-5">
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home"></i>
+                        Back to Predictor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 F1 Driver Team Switch Predictor. Built with machine learning and F1 passion! 🏎️</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

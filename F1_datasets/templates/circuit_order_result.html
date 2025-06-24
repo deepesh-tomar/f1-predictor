@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" style="color:#fff;">
+                <i class="fas fa-car f1-logo"></i>
+                Complete Race Order Prediction
+            </h1>
+            <p class="lead" style="color:#fff;">{{ prediction.circuit_name }} - 2025 Season</p>
+        </div>
+        <!-- Circuit Info -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-road"></i>
+                            {{ prediction.circuit_name }}
+                        </h3>
+                        <p class="card-text">
+                            <i class="fas fa-users"></i>
+                            {{ prediction.predictions|length }} Drivers Predicted
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Race Order Table -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-12">
+                <div class="card order-card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">
+                            <i class="fas fa-list-ol"></i>
+                            Predicted Race Order
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="color:#fff;">Pos</th>
+                                        <th style="color:#fff;">Driver</th>
+                                        <th style="color:#fff;">Team</th>
+                                        <th style="color:#fff;">Qual</th>
+                                        <th style="color:#fff;">Race</th>
+                                        <th style="color:#fff;">Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pred in prediction.predictions %}
+                                    <tr class="{% if loop.index <= 3 %}podium-row{% elif loop.index <= 10 %}points-row{% elif loop.index <= 15 %}midfield-row{% else %}back-row{% endif %}">
+                                        <td style="color:#fff;"><div class="position-badge">{{ loop.index }}</div></td>
+                                        <td><strong style="color:#fff;">{{ pred.driver_name }}</strong></td>
+                                        <td style="color:#fff;">{{ pred.team_name }}</td>
+                                        <td style="color:#fff;"><div class="qualifying-badge">P{{ pred.predicted_qualifying }}</div></td>
+                                        <td style="color:#fff;"><div class="position-badge">P{{ pred.predicted_race }}</div></td>
+                                        <td style="color:#fff;"><div class="points-badge">{{ pred.predicted_points }}</div></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Summary Statistics -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">
+                            <i class="fas fa-chart-bar"></i>
+                            Race Summary
+                        </h4>
+                        <div class="row text-center">
+                            <div class="col-md-3 mb-3">
+                                <h5>Podium Finishers</h5>
+                                <div class="position-badge">{{ prediction.predictions[:3]|length }}</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <h5>Points Finishers</h5>
+                                <div class="points-badge">{{ prediction.predictions[:10]|length }}</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <h5>Midfield</h5>
+                                <div class="qualifying-badge">{{ prediction.predictions[10:15]|length }}</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <h5>Back of Grid</h5>
+                                <div class="position-badge">{{ prediction.predictions[15:]|length }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Action Buttons -->
+        <div class="text-center mt-5">
+            <a href="/" class="btn btn-primary btn-lg me-3"><i class="fas fa-home"></i> New Prediction</a>
+            <a href="/stats" class="btn btn-outline-light btn-lg"><i class="fas fa-chart-bar"></i> View Statistics</a>
+        </div>
+    </div>
+{% endblock %} 
